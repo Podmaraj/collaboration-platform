@@ -1,0 +1,29 @@
+{
+  "name": "collaboration-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-Time Collaboration Platform — Phase 1 Modular Monolith",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev:api": "pnpm --filter @collab/api dev",
+    "dev:web": "pnpm --filter @collab/web dev",
+    "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
+    "build:api": "pnpm --filter @collab/api build",
+    "build:web": "pnpm --filter @collab/web build",
+    "test:api": "pnpm --filter @collab/api test",
+    "test:api:e2e": "pnpm --filter @collab/api test:e2e",
+    "db:migrate": "pnpm --filter @collab/api db:migrate",
+    "db:seed": "pnpm --filter @collab/api db:seed",
+    "db:studio": "pnpm --filter @collab/api db:studio",
+    "lint": "pnpm -r lint",
+    "type-check": "pnpm -r type-check"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.5"
+  }
+}
