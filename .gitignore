@@ -41,3 +41,7 @@ apps/api/prisma/migrations/*.sql
 
 # TypeScript
 *.tsbuildinfo
+
+
+# pnpm
+pnpm-lock.yaml

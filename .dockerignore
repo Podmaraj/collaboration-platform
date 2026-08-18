@@ -1,0 +1,36 @@
+# Dependencies (rebuilt inside Docker)
+node_modules
+**/node_modules
+
+# Build outputs
+dist
+**/dist
+.next
+out
+
+# Environment files (injected at runtime via docker-compose env_file)
+.env
+.env.*
+apps/api/.env
+apps/api/.env.*
+
+# Dev/test files
+**/*.spec.ts
+**/*.e2e.ts
+coverage
+**/*.log
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Docker itself
+**/Dockerfile
+infrastructure/
