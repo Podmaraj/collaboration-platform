@@ -21,7 +21,7 @@ export class WorkspaceMembersService {
     return this.membersRepository.findAll(workspaceId);
   }
 
-  async addMember(workspaceId: string, dto: AddMemberDto, requestingUserId: string) {
+  async addMember(workspaceId: string, dto: AddMemberDto, _requestingUserId: string) {
     const user = await this.usersRepository.findByEmail(dto.email);
     if (!user) {
       throw new NotFoundException({ code: 'USER_NOT_FOUND', message: 'No user with that email exists' });
@@ -65,7 +65,7 @@ export class WorkspaceMembersService {
     return this.membersRepository.updateRole(workspaceId, targetUserId, dto.role);
   }
 
-  async removeMember(workspaceId: string, targetUserId: string, requestingUserId: string) {
+  async removeMember(workspaceId: string, targetUserId: string, _requestingUserId: string) {
     const member = await this.membersRepository.findOne(workspaceId, targetUserId);
     if (!member) {
       throw new NotFoundException({ code: 'MEMBER_NOT_FOUND', message: 'Member not found in this workspace' });

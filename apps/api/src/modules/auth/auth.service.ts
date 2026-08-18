@@ -23,6 +23,7 @@ export interface UserProfile {
 
 export interface AuthResult {
   accessToken: string;
+  refreshToken?: string;  // Passed in HttpOnly cookie, stripped before sending to client
   user: UserProfile;
 }
 

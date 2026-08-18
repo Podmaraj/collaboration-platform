@@ -5,6 +5,7 @@ import {
   PrismaHealthIndicator,
   HealthCheckResult,
 } from '@nestjs/terminus';
+import { PrismaClient } from '@prisma/client';
 import { PrismaService } from '../../database/prisma.service';
 
 @Controller('health')
@@ -33,7 +34,7 @@ export class HealthController {
   @HealthCheck()
   readiness(): Promise<HealthCheckResult> {
     return this.health.check([
-      () => this.prismaHealth.pingCheck('database', this.prisma),
+      () => this.prismaHealth.pingCheck('database', this.prisma as unknown as PrismaClient),
     ]);
   }
 
@@ -44,7 +45,7 @@ export class HealthController {
   @HealthCheck()
   check(): Promise<HealthCheckResult> {
     return this.health.check([
-      () => this.prismaHealth.pingCheck('database', this.prisma),
+      () => this.prismaHealth.pingCheck('database', this.prisma as unknown as PrismaClient),
     ]);
   }
 }

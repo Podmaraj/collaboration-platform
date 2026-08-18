@@ -55,7 +55,7 @@ export class AuthController {
     @Res({ passthrough: true }) reply: FastifyReply,
   ) {
     const result = await this.authService.login(dto);
-    const { refreshToken, ...rest } = result as typeof result & { refreshToken?: string };
+    const { refreshToken, ...rest } = result;
 
     if (refreshToken) {
       reply.setCookie(REFRESH_TOKEN_COOKIE, refreshToken, COOKIE_OPTIONS);

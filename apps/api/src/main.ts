@@ -36,9 +36,12 @@ async function bootstrap() {
   });
 
   // ── Cookies (for HttpOnly refresh token) ──────────────────────────────────
-  await app.register(fastifyCookie, {
-    secret: configService.get<string>('JWT_REFRESH_SECRET'),
-  });
+  await app.register(
+    fastifyCookie as unknown as Parameters<typeof app.register>[0],
+    {
+      secret: configService.get<string>('JWT_REFRESH_SECRET'),
+    },
+  );
 
   // ── Helmet (security headers) ─────────────────────────────────────────────
   await app.register(
