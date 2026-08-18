@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../database/prisma.service';
-import { Document } from '@prisma/client';
-import { PaginationOptions } from '../../../common/utils/pagination.util';
+import { PrismaService } from '../../database/prisma.service';
+import { Prisma, Document } from '@prisma/client';
+import { PaginationOptions } from '../../common/utils/pagination.util';
 
 @Injectable()
 export class DocumentsRepository {
@@ -13,7 +13,12 @@ export class DocumentsRepository {
     content?: Record<string, unknown>;
     createdBy: string;
   }): Promise<Document> {
-    return this.prisma.document.create({ data });
+    return this.prisma.document.create({
+      data: {
+        ...data,
+        content: data.content as Prisma.InputJsonValue,
+      },
+    });
   }
 
   async findAllByWorkspace(
@@ -42,7 +47,13 @@ export class DocumentsRepository {
     id: string,
     data: { title?: string; content?: Record<string, unknown> },
   ): Promise<Document> {
-    return this.prisma.document.update({ where: { id }, data });
+    return this.prisma.document.update({
+      where: { id },
+      data: {
+        ...data,
+        content: data.content as Prisma.InputJsonValue | undefined,
+      },
+    });
   }
 
   async delete(id: string): Promise<void> {

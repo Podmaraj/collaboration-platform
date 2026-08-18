@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../database/prisma.service';
-import { Workspace, WorkspaceRole } from '@prisma/client';
-import { PaginationOptions } from '../../../common/utils/pagination.util';
+import { PrismaService } from '../../database/prisma.service';
+import { Prisma, Workspace, WorkspaceRole } from '@prisma/client';
+import { PaginationOptions } from '../../common/utils/pagination.util';
 
 @Injectable()
 export class WorkspacesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: { name: string; ownerId: string }): Promise<Workspace> {
-    return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const workspace = await tx.workspace.create({ data });
       // Automatically add the creator as OWNER member
       await tx.workspaceMember.create({
