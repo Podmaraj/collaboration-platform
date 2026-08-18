@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
     container_name: collab_postgres
@@ -23,11 +24,32 @@ services:
     networks:
       - collab_network
 
-  # ── Future services will be added here ──────────────────────────────────────
-  # redis:
-  #   image: redis:7-alpine
-  #   ...
-  # pgadmin (optional dev tool):
+  # ── NestJS API ──────────────────────────────────────────────────────────────
+  # Only used when running the full stack in Docker (production-like).
+  # For local development, run `pnpm --filter @collab/api dev` instead.
+  api:
+    build:
+      context: ..                      # monorepo root (for pnpm workspace)
+      dockerfile: apps/api/Dockerfile
+    container_name: collab_api
+    restart: unless-stopped
+    env_file:
+      - ../.env                        # reads DATABASE_URL, JWT secrets, etc.
+    environment:
+      # Override DATABASE_URL host to use Docker service name instead of localhost
+      DATABASE_URL: postgresql://${POSTGRES_USER:-collab_user}:${POSTGRES_PASSWORD:-collab_secret}@postgres:5432/${POSTGRES_DB:-collab_db}?schema=public
+      NODE_ENV: production
+    ports:
+      - '${API_PORT:-3001}:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy     # waits until Postgres passes health check
+    networks:
+      - collab_network
+    profiles:
+      - fullstack                      # only starts with: docker compose --profile fullstack up
+
+  # ── pgAdmin (optional dev tool) ─────────────────────────────────────────────
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: collab_pgadmin
